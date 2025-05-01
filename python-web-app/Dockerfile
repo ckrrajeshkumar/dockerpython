@@ -1,21 +1,27 @@
-FROM ubuntu
+FROM ubuntu:latest
 
+# Set working directory
 WORKDIR /app
 
-COPY requirements.txt /app/
-COPY devops /app/
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    apt-get clean
 
-RUN apt-get update && apt-get install -y python3 python3-pip python3-venv
+# Copy files into the container
+COPY requirement.txt /app/
+COPY devops /app/devops/
 
-SHELL ["/bin/bash", "-c"]
+# Install Python dependencies
+RUN pip3 install -r requirement.txt
 
-RUN python3 -m venv venv1 && \
-source venv1/bin/activate && \
-pip install --no-cache-dir -r requirements.txt
+# Set working directory to your project (assuming manage.py is inside devops/)
+WORKDIR /app/devops
 
-EXPOSE 8000
+# Set the default command
+ENTRYPOINT ["python3"]
+CMD ["manage.py", "runserver", "0.0.0.0:8000"]
 
-CMD source venv1/bin/activate && python3 manage.py runserver 0.0.0.0:8000
 
 
 
