@@ -13,7 +13,7 @@ COPY requirement.txt /app/
 COPY devops /app/devops/
 
 # Install Python dependencies
-RUN pip3 install -r requirement.txt
+RUN pip3 install -r requirements.txt
 
 # Set working directory to your project (assuming manage.py is inside devops/)
 WORKDIR /app/devops
